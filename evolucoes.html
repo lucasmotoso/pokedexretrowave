@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evoluções | Pokédex Retrowave</title>
+    <link rel="icon" href="imagens/logo-pokedex.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles-evolucao.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="dark">
+    <!-- Header principal -->
+    <header class="pokedex-header">
+      <div class="logo-container">
+        <img
+          src="imagens/logo-pokedex.png"
+          alt="Logo Pokédex"
+          class="pokedex-logo"
+        />
+      </div>
+
+      <nav class="pokedex-nav">
+        <a href="index.html">Início</a>
+        <a href="evolucoes.html" class="active">Evoluções</a>
+        <a href="#">Favoritos</a>
+      </nav>
+
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchInput"
+          class="search-bar"
+          placeholder="Buscar Pokémon..."
+        />
+        <ul id="suggestions" class="suggestions-list"></ul>
+      </div>
+    </header>
+
+    <!-- Computador evolutivo -->
+    <main class="terminal-container">
+      <div class="terminal-frame">
+        <div class="terminal-top">
+          <div class="terminal-label">PX-LAB 1989</div>
+
+          <div class="led-group">
+            <div class="led red"></div>
+            <div class="led yellow"></div>
+            <div class="led green"></div>
+          </div>
+
+          <div class="theme-toggle-wrapper">
+            <button id="themeToggle" class="theme-toggle-btn">🌙</button>
+          </div>
+        </div>
+
+        <!-- Barra de carregamento separada da árvore -->
+        <div class="status-bar hidden">
+          <div class="status-fill"></div>
+        </div>
+
+        <div class="terminal-screen">
+          <div id="evolution-display">
+            <p>Selecione um Pokémon para ver suas evoluções.</p>
+          </div>
+        </div>
+
+        <div class="terminal-buttons">
+          <button class="btn">Scan</button>
+          <button class="btn">Load</button>
+          <button class="btn">Zoom</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- JS para alternância de tema -->
+    <script>
+      const toggleBtn = document.getElementById("themeToggle");
+      toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        toggleBtn.textContent = document.body.classList.contains("dark")
+          ? "🌙"
+          : "☀️";
+      });
+    </script>
+    <script src="script-evolucao.js"></script>
+  </body>
+</html>
