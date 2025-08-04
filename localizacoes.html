@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Localizações | Pokédex Retrowave</title>
+    <link rel="icon" href="imagens/logo-pokedex.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles-localizacao.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="dark">
+  <!-- HEADER PADRONIZADO -->
+<header class="pokedex-header">
+  <div class="logo-container">
+    <img src="imagens/logo-pokedex.png" alt="Logo Pokédex" class="pokedex-logo" />
+  </div>
+
+  <button id="menu-toggle" class="menu-toggle">☰</button>
+
+    <span></span><span></span><span></span>
+  </button>
+
+  <nav class="pokedex-nav" id="pokedex-nav">
+    <a href="index.html">Início</a>
+    <a href="evolucoes.html">Evoluções</a>
+    <a href="localizacoes.html">Localizações</a>
+  </nav>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Buscar Pokémon..." />
+    <ul id="suggestions" class="suggestions-list"></ul>
+  </div>
+</header>
+
+    <main class="mapa-container">
+      <div class="mapa-frame">
+        <div class="parafuso tl"></div>
+        <div class="parafuso tr"></div>
+        <div class="parafuso bl"></div>
+        <div class="parafuso br"></div>
+
+        <div class="mapa-topo">
+          <div class="mapa-titulo">🌍 PX-MAP 1989</div>
+          <div class="led-group">
+            <div class="led red"></div>
+            <div class="led yellow"></div>
+            <div class="led green"></div>
+          </div>
+          <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+        </div>
+
+        <div class="mapa-conteudo" id="mapa-conteudo">
+          <p>🔍 Selecione uma localização para ver os Pokémon encontrados.</p>
+        </div>
+      </div>
+    </main>
+
+    <script src="script-localizacao.js"></script>
+    <footer class="pokedex-footer">
+  <div class="footer-frame">
+    <div class="footer-top">
+      <div class="led-group">
+        <div class="led red"></div>
+        <div class="led yellow"></div>
+        <div class="led green"></div>
+      </div>
+      <h2 class="footer-title">Pokédex Retrowave</h2>
+    </div>
+
+    <div class="footer-links">
+      <a href="https://github.com/lucasmotoso" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/lucas-motoso/" target="_blank">LinkedIn</a>
+      <a href="mailto:lucasmotoso@gmail.com">Email</a>
+      <a href="https://www.instagram.com/lucas_motoso/" target="_blank">Instagram</a>
+    </div>
+
+    <div class="footer-info">
+      <p>© 2025 Lucas Motoso. Todos os direitos reservados.</p>
+      <p>Este projeto não é afiliado à The Pokémon Company.</p>
+    </div>
+  </div>
+</footer>
+  </body>
+</html>
