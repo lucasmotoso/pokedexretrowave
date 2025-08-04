@@ -154,9 +154,12 @@ searchInput.addEventListener('keydown', (e) => {
 
 fetchAllPokemonNames();
 fetchPokemon(currentId);
-// ============================
-// Botão "Ver Evolução"
-// ============================
+function getCurrentPokemonName() {
+  const name = nameEl.textContent.trim().toLowerCase();
+  if (!name || name === 'nome') return null;
+  return name;
+}
+
 // ============================
 // Botão "Ver Evolução"
 // ============================
@@ -164,17 +167,19 @@ const evolutionBtn = document.getElementById('evolution-btn');
 
 if (evolutionBtn) {
   evolutionBtn.addEventListener('click', () => {
-    const pokemonName = nameEl.textContent.toLowerCase();
+    const pokemonName = getCurrentPokemonName();
     if (pokemonName) {
-      const repoBase = '/pokedexretrowave'; // Nome do seu repositório
+      const repoBase = '/pokedexretrowave'; // Ajuste para GitHub Pages
       const url = `${repoBase}/evolucoes.html?pokemon=${encodeURIComponent(pokemonName)}`;
       window.location.href = url;
+    } else {
+      console.warn('Nome do Pokémon inválido ou ainda não carregado.');
     }
   });
 }
 
 // ============================
-// Carregar Pokémon da URL (quando vindo da tela de Evoluções)
+// Carregar Pokémon da URL (quando vindo da tela de Evoluções ou localização)
 // ============================
 window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
@@ -182,5 +187,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (pokemonParam) {
     fetchPokemon(pokemonParam.toLowerCase());
+    currentId = parseInt(pokemonParam); // Atualiza ID atual
+  } else {
+    fetchPokemon(currentId); // padrão inicial
   }
 });
