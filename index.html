@@ -1,89 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="imagens/logo-pokedex.png" />
-
   <title>Pokédex Retrowave</title>
+  <link rel="icon" type="image/png" href="imagens/logo-pokedex.png" />
   <link rel="stylesheet" href="styles.css" />
-  <!-- No <head> da index.html -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
-
 </head>
 
 <body>
- <header class="pokedex-header">
-  <div class="logo-container">
-    <img src="imagens/logo-pokedex.png" Logo Pokédex" class="pokedex-logo" />
-  </div>
+  <!-- HEADER -->
+  <header class="pokedex-header">
+    <div class="logo-container">
+      <img src="imagens/logo-pokedex.png" alt="Logo Pokédex" class="pokedex-logo" />
+    </div>
 
-  <nav class="pokedex-nav">
-    <a href="index.html">Início</a>
-    <a href="evolucoes.html">Evoluções</a>
-    <a href="#">Favoritos</a>
-  </nav>
+    <button id="menu-toggle" class="menu-toggle">☰</button>
 
-  <div class="search-container">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Buscar Pokémon..." />
-    <ul id="suggestions" class="suggestions-list"></ul>
-  </div>
-</header>
+    <nav class="pokedex-nav" id="pokedex-nav">
+      <a href="index.html">Início</a>
+      <a href="evolucoes.html">Evoluções</a>
+      <a href="#">Favoritos</a>
+    </nav>
 
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-bar" placeholder="Buscar Pokémon..." />
+      <ul id="suggestions" class="suggestions-list"></ul>
+    </div>
+  </header>
 
+  <!-- POKEDEX -->
   <div class="pokedex">
-
     <div class="pokedex-left">
       <div class="dot-buttons">
-  <div class="dot red"></div>
-  <div class="dot blue"></div>
-  <div class="dot green"></div>
-</div>
+        <div class="dot red"></div>
+        <div class="dot blue"></div>
+        <div class="dot green"></div>
+      </div>
 
       <div class="pokedex-sticker">PXD-1809</div>
-
-      <div class="pokedex-status-bar">
-  <div class="status-fill"></div>
-</div>
-
+      <div class="pokedex-status-bar"><div class="status-fill"></div></div>
       <div class="screw-top-right"></div>
       <div class="screw-bottom-left"></div>
 
       <div class="pokedex-top">
         <div class="led-group">
-  <div class="led led-red"></div>
-  <div class="led led-yellow"></div>
-  <div class="led led-green"></div>
-</div>
-
+          <div class="led led-red"></div>
+          <div class="led led-yellow"></div>
+          <div class="led led-green"></div>
+        </div>
       </div>
 
       <div class="pokedex-screen">
-
         <div id="pokemon-display" class="pokemon-info">
           <p>Carregando...</p>
         </div>
-
       </div>
 
       <div class="pokedex-controls">
-        
         <button id="prev-btn">◀</button>
-
         <button id="toggle-theme" class="theme-btn">🌙</button>
-        
-
         <button id="next-btn">▶</button>
-         <div class="pokedex-led-buttons">
-          
-       
+        <button id="evolution-btn" class="btn">Ver Evolução</button>
       </div>
-      </div>
-     
-
 
       <div class="pokedex-bottom-decoration">
         <div class="speaker"></div>
@@ -97,26 +78,34 @@
           <p id="pokemon-type">Tipo</p>
           <p id="pokemon-id">#001</p>
         </div>
+
         <div class="pokedex-stats">
           <p id="pokemon-height">Altura: </p>
           <p id="pokemon-weight">Peso: </p>
           <p id="pokemon-abilities">Habilidades: </p>
-          <div id="pokemon-base-stats" class="base-stats">
-            <!-- Os stats aparecerão aqui -->
-          </div>
+          <div id="pokemon-base-stats" class="base-stats"></div>
         </div>
+
         <div class="stat">
           <label>HP:</label>
           <div class="bar">
             <div class="fill" style="width: 60%"></div>
           </div>
         </div>
+
         <div class="seal-container">
           <img src="imagens/logo-pokedex1.png" alt="Selo Pokédex" class="pokedex-seal" />
         </div>
       </div>
     </div>
-    <script src="script.js"></script>
-</body>
+  </div>
 
+  <script src="script.js"></script>
+  <script>
+    // Menu hamburguer
+    document.getElementById("menu-toggle").addEventListener("click", () => {
+      document.getElementById("pokedex-nav").classList.toggle("nav-open");
+    });
+  </script>
+</body>
 </html>

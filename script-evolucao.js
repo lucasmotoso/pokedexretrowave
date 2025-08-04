@@ -4,6 +4,7 @@ const evolutionDisplay = document.getElementById("evolution-display");
 const scanButton = document.querySelector(".btn:nth-child(1)");
 
 let allPokemonNames = [];
+let lastLoadedPokemon = null; // <- nova variável de controle
 
 // ============================
 // Autocomplete
@@ -28,9 +29,11 @@ searchInput.addEventListener("input", () => {
     const li = document.createElement("li");
     li.textContent = capitalize(name);
     li.addEventListener("click", () => {
-      searchInput.value = capitalize(name);
       suggestionsList.innerHTML = "";
-      loadEvolutionChain(name.toLowerCase());
+      searchInput.value = capitalize(name);
+      if (name.toLowerCase() !== lastLoadedPokemon) {
+        loadEvolutionChain(name.toLowerCase());
+      }
     });
     suggestionsList.appendChild(li);
   });
@@ -39,7 +42,7 @@ searchInput.addEventListener("input", () => {
 searchInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     const query = searchInput.value.toLowerCase().trim();
-    if (query !== "") {
+    if (query !== "" && query !== lastLoadedPokemon) {
       suggestionsList.innerHTML = "";
       loadEvolutionChain(query);
     }
@@ -51,7 +54,7 @@ searchInput.addEventListener("keydown", (e) => {
 // ============================
 scanButton.addEventListener("click", () => {
   const query = searchInput.value.toLowerCase().trim();
-  if (query) {
+  if (query && query !== lastLoadedPokemon) {
     loadEvolutionChain(query);
   }
 });
@@ -60,6 +63,9 @@ scanButton.addEventListener("click", () => {
 // Carregar e renderizar cadeia
 // ============================
 async function loadEvolutionChain(pokemonName) {
+  if (pokemonName === lastLoadedPokemon) return;
+  lastLoadedPokemon = pokemonName;
+
   evolutionDisplay.innerHTML = `<p>🔄 Carregando evolução de ${capitalize(pokemonName)}...</p>`;
   document.querySelector(".status-bar")?.classList.remove("hidden");
 
@@ -72,6 +78,7 @@ async function loadEvolutionChain(pokemonName) {
     const evoData = await evoRes.json();
 
     const chain = parseEvolutionChain(evoData.chain);
+    evolutionDisplay.innerHTML = ""; // Limpa a tela antes de renderizar
     await renderEvolutionChain(chain);
 
     document.querySelector(".status-bar")?.classList.add("hidden");
@@ -92,8 +99,8 @@ function parseEvolutionChain(chainNode) {
     const condition = evolutionDetails?.min_level
       ? `Lvl ${evolutionDetails.min_level}`
       : evolutionDetails?.item
-      ? `Item: ${capitalize(evolutionDetails.item.name)}`
-      : "Base";
+        ? `Item: ${capitalize(evolutionDetails.item.name)}`
+        : "Base";
 
     return {
       name,
@@ -124,6 +131,9 @@ async function renderEvolutionChain(chain) {
         <span class="condition">${stage.condition}</span>
       </div>
     `;
+    card.addEventListener("click", () => {
+      window.location.href = `index.html?pokemon=${stage.name}`;
+    });
 
     const wrapper = document.createElement("div");
     wrapper.className = "evo-wrapper";
@@ -158,5 +168,20 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Inicializar autocomplete
+// ============================
+// Inicialização
+// ============================
 fetchAllPokemonNames();
+
+window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const pokemonFromURL = params.get("pokemon");
+  if (pokemonFromURL && pokemonFromURL.toLowerCase() !== lastLoadedPokemon) {
+    searchInput.value = capitalize(pokemonFromURL);
+    loadEvolutionChain(pokemonFromURL.toLowerCase());
+  }
+});
+
+document.getElementById("backToPokedex").addEventListener("click", () => {
+  window.location.href = "index.html";
+});

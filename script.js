@@ -154,3 +154,29 @@ searchInput.addEventListener('keydown', (e) => {
 
 fetchAllPokemonNames();
 fetchPokemon(currentId);
+// ============================
+// Botão "Ver Evolução"
+// ============================
+const evolutionBtn = document.getElementById('evolution-btn');
+
+if (evolutionBtn) {
+  evolutionBtn.addEventListener('click', () => {
+    const pokemonName = nameEl.textContent.toLowerCase();
+    if (pokemonName) {
+      const url = new URL('evolucoes.html', window.location.origin);
+      url.searchParams.set('pokemon', pokemonName);
+      window.location.href = url.toString();
+    }
+  });
+}
+// ============================
+// Carregar Pokémon da URL (quando vindo da tela de Evoluções)
+// ============================
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const pokemonParam = params.get('pokemon');
+
+  if (pokemonParam) {
+    fetchPokemon(pokemonParam.toLowerCase());
+  }
+});

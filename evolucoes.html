@@ -13,34 +13,38 @@
     />
   </head>
   <body class="dark">
-    <!-- Header principal -->
+    <!-- HEADER -->
     <header class="pokedex-header">
-      <div class="logo-container">
-        <img
-          src="imagens/logo-pokedex.png"
-          alt="Logo Pokédex"
-          class="pokedex-logo"
-        />
-      </div>
+      <div class="header-wrapper">
+        <div class="logo-container">
+          <img
+            src="imagens/logo-pokedex.png"
+            alt="Logo Pokédex"
+            class="pokedex-logo"
+          />
+        </div>
 
-      <nav class="pokedex-nav">
-        <a href="index.html">Início</a>
-        <a href="evolucoes.html" class="active">Evoluções</a>
-        <a href="#">Favoritos</a>
-      </nav>
+        <button class="hamburger" id="hamburger">&#9776;</button>
 
-      <div class="search-container">
-        <input
-          type="text"
-          id="searchInput"
-          class="search-bar"
-          placeholder="Buscar Pokémon..."
-        />
-        <ul id="suggestions" class="suggestions-list"></ul>
+        <nav class="pokedex-nav" id="nav-menu">
+          <a href="index.html">Início</a>
+          <a href="evolucoes.html" class="active">Evoluções</a>
+          <a href="#">Favoritos</a>
+        </nav>
+
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-bar"
+            placeholder="Buscar Pokémon..."
+          />
+          <ul id="suggestions" class="suggestions-list"></ul>
+        </div>
       </div>
     </header>
 
-    <!-- Computador evolutivo -->
+    <!-- TERMINAL -->
     <main class="terminal-container">
       <div class="terminal-frame">
         <div class="terminal-top">
@@ -57,7 +61,6 @@
           </div>
         </div>
 
-        <!-- Barra de carregamento separada da árvore -->
         <div class="status-bar hidden">
           <div class="status-fill"></div>
         </div>
@@ -69,21 +72,27 @@
         </div>
 
         <div class="terminal-buttons">
-          <button class="btn">Scan</button>
-          <button class="btn">Load</button>
-          <button class="btn">Zoom</button>
+          <button class="btn" id="backToPokedex">🔙 Pokédex</button>
         </div>
       </div>
     </main>
 
-    <!-- JS para alternância de tema -->
+    <!-- Scripts -->
     <script>
+      // Alternância de tema
       const toggleBtn = document.getElementById("themeToggle");
       toggleBtn.addEventListener("click", () => {
         document.body.classList.toggle("dark");
         toggleBtn.textContent = document.body.classList.contains("dark")
           ? "🌙"
           : "☀️";
+      });
+
+      // Menu responsivo
+      const hamburger = document.getElementById("hamburger");
+      const navMenu = document.getElementById("nav-menu");
+      hamburger.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
       });
     </script>
     <script src="script-evolucao.js"></script>
