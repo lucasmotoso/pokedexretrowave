@@ -157,18 +157,22 @@ fetchPokemon(currentId);
 // ============================
 // Botão "Ver Evolução"
 // ============================
+// ============================
+// Botão "Ver Evolução"
+// ============================
 const evolutionBtn = document.getElementById('evolution-btn');
 
 if (evolutionBtn) {
   evolutionBtn.addEventListener('click', () => {
     const pokemonName = nameEl.textContent.toLowerCase();
     if (pokemonName) {
-      const url = new URL('evolucoes.html', window.location.origin);
-      url.searchParams.set('pokemon', pokemonName);
-      window.location.href = url.toString();
+      const repoBase = '/pokedexretrowave'; // Nome do seu repositório
+      const url = `${repoBase}/evolucoes.html?pokemon=${encodeURIComponent(pokemonName)}`;
+      window.location.href = url;
     }
   });
 }
+
 // ============================
 // Carregar Pokémon da URL (quando vindo da tela de Evoluções)
 // ============================
