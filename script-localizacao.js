@@ -129,13 +129,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Redirecionar para a pokedex.html
-  content.addEventListener("click", (e) => {
-    if (e.target.classList.contains("pokemon-link")) {
-      const name = e.target.dataset.name;
-      window.location.href = `${window.location.origin}/index.html?pokemon=${name}`;
-    }
-  });
+ // Redirecionar para a pokedex.html mesmo no GitHub Pages
+content.addEventListener("click", (e) => {
+  if (e.target.classList.contains("pokemon-link")) {
+    const name = e.target.dataset.name;
+    const basePath = window.location.pathname.split('/').slice(0, -1).join('/');
+    window.location.href = `${basePath}/index.html?pokemon=${name}`;
+  }
+});
+
 
   // Helpers
   function formatLocationName(name) {
