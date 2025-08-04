@@ -132,7 +132,8 @@ async function renderEvolutionChain(chain) {
       </div>
     `;
     card.addEventListener("click", () => {
-      window.location.href = `index.html?pokemon=${stage.name}`;
+      window.location.href = `${window.location.origin}/pokedexretrowave/index.html?pokemon=${stage.name}`;
+
     });
 
     const wrapper = document.createElement("div");
