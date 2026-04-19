@@ -1,88 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Localizações | Pokédex Retrowave</title>
-    <link rel="icon" href="imagens/logo-pokedex.png" />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="styles-localizacao.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="dark">
-  <!-- HEADER PADRONIZADO -->
-<header class="pokedex-header">
-  <div class="logo-container">
-    <img src="imagens/logo-pokedex.png" alt="Logo Pokédex" class="pokedex-logo" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Pokédex Retrowave - Localizações dos Pokémon" />
+  <meta name="author" content="Lucas Motoso" />
+  <meta name="theme-color" content="#0a0a0f" />
+  
+  <title>Localizações | Pokédex Retrowave</title>
+  <link rel="icon" href="imagens/logo-pokedex.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-localizacao.css" />
+</head>
+
+<body class="location-page">
+  <div class="background-effects">
+    <div class="scanline"></div>
+    <div class="grid-overlay"></div>
   </div>
 
-  <button id="menu-toggle" class="menu-toggle">☰</button>
+  <header class="pokedex-header" role="banner">
+    <div class="header-content">
+      <div class="logo-section">
+        <img src="imagens/logo-pokedex.png" alt="Logo Pokédex" class="pokedex-logo" loading="lazy" />
+        <span class="logo-text">Pokedex Wave</span>
+      </div>
 
-    <span></span><span></span><span></span>
-  </button>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
 
-  <nav class="pokedex-nav" id="pokedex-nav">
-    <a href="index.html">Início</a>
-    <a href="evolucoes.html">Evoluções</a>
-    <a href="localizacoes.html">Localizações</a>
-  </nav>
+      <nav class="pokedex-nav" id="pokedex-nav" role="navigation">
+        <a href="index.html" class="nav-link">
+          <span class="nav-icon">◈</span> Início
+        </a>
+        <a href="evolucoes.html" class="nav-link">
+          <span class="nav-icon">⬡</span> Evoluções
+        </a>
+        <a href="localizacoes.html" class="nav-link active">
+          <span class="nav-icon">◎</span> Localizações
+        </a>
+      </nav>
 
-  <div class="search-container">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Buscar Pokémon..." />
-    <ul id="suggestions" class="suggestions-list"></ul>
-  </div>
-</header>
+      <div class="search-section">
+        <div class="search-wrapper">
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-bar" 
+            placeholder="Buscar Pokémon..." 
+            autocomplete="off"
+            aria-label="Buscar Pokémon"
+          />
+          <div class="search-icon">⌕</div>
+          <ul id="suggestions" class="suggestions-list" role="listbox"></ul>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <main class="mapa-container">
-      <div class="mapa-frame">
-        <div class="parafuso tl"></div>
-        <div class="parafuso tr"></div>
-        <div class="parafuso bl"></div>
-        <div class="parafuso br"></div>
+  <main class="main-content" role="main">
+    <div class="map-container">
+      <div class="map-frame">
+        <div class="map-screws">
+          <div class="screw screw-tl"></div>
+          <div class="screw screw-tr"></div>
+          <div class="screw screw-bl"></div>
+          <div class="screw screw-br"></div>
+        </div>
 
-        <div class="mapa-topo">
-          <div class="mapa-titulo">🌍 PX-MAP 1989</div>
-          <div class="led-group">
-            <div class="led red"></div>
-            <div class="led yellow"></div>
-            <div class="led green"></div>
+        <div class="map-header">
+          <div class="map-title">
+            <span class="title-icon">❋</span>
+            <span class="title-text">PX-WORLD MAP</span>
           </div>
-          <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+          
+          <div class="map-leds">
+            <div class="led led-red"></div>
+            <div class="led led-yellow"></div>
+            <div class="led led-green"></div>
+          </div>
+
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Alternar tema">
+            <span class="theme-icon">◐</span>
+          </button>
         </div>
 
-        <div class="mapa-conteudo" id="mapa-conteudo">
-          <p>🔍 Selecione uma localização para ver os Pokémon encontrados.</p>
+        <div class="map-content" id="map-content" role="region" aria-label="Mapa de localizações">
+          <div class="map-background">
+            <img src="imagens/mapa-mundi.png" alt="Mapa mundial Pokémon" class="world-map" loading="lazy" />
+          </div>
+          
+          <div class="map-overlay">
+            <div class="welcome-panel">
+              <div class="panel-icon">✦</div>
+              <h2>SELECIONE UM POKÉMON</h2>
+              <p>Digite o nome de um Pokémon para ver onde ele pode ser encontrado</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="locations-list" id="locations-list">
         </div>
       </div>
-    </main>
+    </div>
+  </main>
 
-    <script src="script-localizacao.js"></script>
-    <footer class="pokedex-footer">
-  <div class="footer-frame">
-    <div class="footer-top">
-      <div class="led-group">
-        <div class="led red"></div>
-        <div class="led yellow"></div>
-        <div class="led green"></div>
+  <footer class="pokedex-footer" role="contentinfo">
+    <div class="footer-frame">
+      <div class="footer-glow"></div>
+      <div class="footer-top">
+        <div class="led-group">
+          <div class="led led-red"></div>
+          <div class="led led-yellow"></div>
+          <div class="led led-green"></div>
+        </div>
+        <h2 class="footer-title">Pokédex Retrowave</h2>
+        <div class="version-tag">v2.0</div>
       </div>
-      <h2 class="footer-title">Pokédex Retrowave</h2>
-    </div>
 
-    <div class="footer-links">
-      <a href="https://github.com/lucasmotoso" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/lucas-motoso/" target="_blank">LinkedIn</a>
-      <a href="mailto:lucasmotoso@gmail.com">Email</a>
-      <a href="https://www.instagram.com/lucas_motoso/" target="_blank">Instagram</a>
-    </div>
+      <div class="footer-links">
+        <a href="https://github.com/lucasmotoso" target="_blank" rel="noopener noreferrer" class="social-link">
+          <span class="link-icon">⌘</span> GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/lucas-motoso/" target="_blank" rel="noopener noreferrer" class="social-link">
+          <span class="link-icon">◈</span> LinkedIn
+        </a>
+        <a href="mailto:lucasmotoso@gmail.com" class="social-link">
+          <span class="link-icon">✉</span> Email
+        </a>
+        <a href="https://www.instagram.com/lucas_motoso/" target="_blank" rel="noopener noreferrer" class="social-link">
+          <span class="link-icon">◉</span> Instagram
+        </a>
+      </div>
 
-    <div class="footer-info">
-      <p>© 2025 Lucas Motoso. Todos os direitos reservados.</p>
-      <p>Este projeto não é afiliado à The Pokémon Company.</p>
+      <div class="footer-info">
+        <p>© 2025 Lucas Motoso. Todos os direitos reservados.</p>
+        <p class="disclaimer">Este projeto não é afiliado à The Pokémon Company.</p>
+      </div>
     </div>
-  </div>
-</footer>
-  </body>
+  </footer>
+
+  <script src="script-localizacao.js"></script>
+</body>
 </html>

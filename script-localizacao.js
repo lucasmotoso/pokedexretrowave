@@ -1,150 +1,273 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const themeToggleBtn = document.getElementById("theme-toggle");
-  const body = document.body;
-  const searchInput = document.getElementById("searchInput");
-  const suggestionsBox = document.getElementById("suggestions");
-  const content = document.getElementById("mapa-conteudo");
-  const hamburger = document.getElementById("menu-toggle");
-  const navMenu = document.getElementById("pokedex-nav");
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('searchInput');
+  const suggestionsList = document.getElementById('suggestions');
+  const mapContent = document.getElementById('map-content');
+  const locationsList = document.getElementById('locations-list');
+  const themeToggle = document.getElementById('theme-toggle');
+  const menuToggle = document.getElementById('menu-toggle');
+  const pokedexNav = document.getElementById('pokedex-nav');
 
   let pokemonList = [];
-
-  // Fetch lista completa de Pokémon para autocomplete
-  async function fetchAllPokemonNames() {
-    try {
-      const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10000");
-      const data = await response.json();
-      pokemonList = data.results.map(p => p.name);
-    } catch (err) {
-      console.error("Erro ao buscar lista de Pokémon:", err);
-    }
-  }
-
-  fetchAllPokemonNames();
-
-  // Autocomplete ao digitar
-  searchInput.addEventListener("input", () => {
-    const value = searchInput.value.toLowerCase();
-    suggestionsBox.innerHTML = "";
-
-    if (value.length > 1) {
-      const filtered = pokemonList.filter(name => name.includes(value)).slice(0, 10);
-      filtered.forEach(name => {
-        const item = document.createElement("div");
-        item.classList.add("suggestion-item");
-        item.textContent = capitalize(name);
-        item.addEventListener("click", () => {
-          searchInput.value = capitalize(name);
-          suggestionsBox.innerHTML = "";
-          fetchAndRenderLocation(name);
-        });
-        suggestionsBox.appendChild(item);
-      });
-    }
-  });
-
-  // Enter na barra de pesquisa
-  searchInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      const pokemon = searchInput.value.trim().toLowerCase();
-      if (pokemon) {
-        fetchAndRenderLocation(pokemon);
-        suggestionsBox.innerHTML = "";
-      }
-    }
-  });
-
-  // Toggle tema escuro/claro
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener("click", () => {
-      body.classList.toggle("dark-mode");
-      body.style.backgroundImage = body.classList.contains("dark-mode")
-        ? "url('imagens/background2.png')"
-        : "url('imagens/background1.png')";
-    });
-  }
-
-  // Hamburger menu
-  if (hamburger && navMenu) {
-    hamburger.addEventListener("click", () => {
-      navMenu.classList.toggle("show");
-    });
-  }
-
-  // Buscar localizações do Pokémon
-  async function fetchAndRenderLocation(pokemonName) {
-    try {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}/encounters`);
-      if (!response.ok) throw new Error("Pokémon não encontrado");
-
-      const locations = await response.json();
-      content.innerHTML = "";
-
-      if (locations.length === 0) {
-        content.innerHTML = "<p>Este Pokémon não foi encontrado em localizações conhecidas.</p>";
-        return;
-      }
-
-      for (const location of locations) {
-        const card = document.createElement("div");
-        card.className = "local-card";
-        const locName = formatLocationName(location.location_area.name);
-        const versions = location.version_details.map(v => capitalize(v.version.name)).join(", ");
-
-        card.innerHTML = `
-          <h3>${locName}</h3>
-          <p><strong>Versões:</strong> ${versions}</p>
-          <div class="other-pokemon">Carregando outros Pokémon dessa área...</div>
-        `;
-
-        card.addEventListener("click", () => {
-          fetchOtherPokemonFromLocation(location.location_area.url, card.querySelector(".other-pokemon"));
-        });
-
-        content.appendChild(card);
-      }
-
-    } catch (err) {
-      content.innerHTML = `<p class="error">${err.message}</p>`;
-    }
-  }
-
-  // Buscar outros Pokémon de uma localização
-  async function fetchOtherPokemonFromLocation(url, container) {
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      const pokemonList = data.pokemon_encounters.map(p => p.pokemon.name);
-
-      if (pokemonList.length === 0) {
-        container.innerHTML = "Nenhum outro Pokémon nesta área.";
-        return;
-      }
-
-      container.innerHTML = `<strong>Outros Pokémon encontrados:</strong><br>` +
-        pokemonList.map(name => `<span class="pokemon-link" data-name="${name}">${capitalize(name)}</span>`).join(", ");
-    } catch (err) {
-      container.innerHTML = "Erro ao carregar outros Pokémon.";
-    }
-  }
-
- // Redirecionar para a pokedex.html mesmo no GitHub Pages
-content.addEventListener("click", (e) => {
-  if (e.target.classList.contains("pokemon-link")) {
-    const name = e.target.dataset.name;
-    const basePath = window.location.pathname.split('/').slice(0, -1).join('/');
-    window.location.href = `${basePath}/index.html?pokemon=${name}`;
-  }
-});
-
-
-  // Helpers
-  function formatLocationName(name) {
-    return name.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());
-  }
+  let searchTimeout = null;
+  let loadedPokemon = null;
 
   function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+
+  function capitalizeWords(str) {
+    return str.split('-').map(word => capitalize(word)).join('-');
+  }
+
+  function formatLocationName(name) {
+    return name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  }
+
+  async function fetchAllPokemonNames() {
+    try {
+      const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000');
+      const data = await response.json();
+      pokemonList = data.results.map(p => ({
+        name: p.name,
+        url: p.url
+      }));
+    } catch (err) {
+      console.error('Erro ao buscar lista de Pokémon:', err);
+    }
+  }
+
+  function showSuggestions(query) {
+    suggestionsList.innerHTML = '';
+    
+    if (query.length < 2) {
+      suggestionsList.classList.remove('show');
+      return;
+    }
+
+    const filtered = pokemonList
+      .filter(p => p.name.toLowerCase().startsWith(query.toLowerCase()))
+      .slice(0, 8);
+
+    if (filtered.length === 0) {
+      suggestionsList.classList.remove('show');
+      return;
+    }
+
+    filtered.forEach((pokemon, index) => {
+      const li = document.createElement('li');
+      li.textContent = capitalize(pokemon.name);
+      li.addEventListener('click', () => {
+        searchInput.value = capitalize(pokemon.name);
+        suggestionsList.classList.remove('show');
+        fetchAndRenderLocation(pokemon.name);
+      });
+      
+      if (index === 0) {
+        li.classList.add('highlighted');
+      }
+      
+      suggestionsList.appendChild(li);
+    });
+
+    suggestionsList.classList.add('show');
+  }
+
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    const query = e.target.value.trim();
+    
+    searchTimeout = setTimeout(() => {
+      showSuggestions(query);
+    }, 150);
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    const highlighted = suggestionsList.querySelector('.highlighted');
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (highlighted && highlighted.nextElementSibling) {
+        highlighted.classList.remove('highlighted');
+        highlighted.nextElementSibling.classList.add('highlighted');
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (highlighted && highlighted.previousElementSibling) {
+        highlighted.classList.remove('highlighted');
+        highlighted.previousElementSibling.classList.add('highlighted');
+      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (highlighted) {
+        highlighted.click();
+      } else {
+        const query = searchInput.value.trim();
+        if (query) {
+          fetchAndRenderLocation(query);
+          suggestionsList.classList.remove('show');
+        }
+      }
+    } else if (e.key === 'Escape') {
+      suggestionsList.classList.remove('show');
+      searchInput.blur();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-wrapper') && !e.target.closest('.suggestions-list')) {
+      suggestionsList.classList.remove('show');
+    }
+  });
+
+  async function fetchAndRenderLocation(pokemonName) {
+    if (pokemonName.toLowerCase() === loadedPokemon) return;
+    loadedPokemon = pokemonName.toLowerCase();
+
+    mapContent.innerHTML = `
+      <div class="map-background">
+        <img src="imagens/mapa-mundi.png" alt="Mapa mundial Pokémon" class="world-map" />
+      </div>
+      <div class="map-overlay">
+        <div class="location-loading">
+          <div class="loading-spinner-loc"></div>
+          <span>PESQUISANDO LOCAIS...</span>
+        </div>
+      </div>
+    `;
+
+    locationsList.innerHTML = '';
+
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}/encounters`);
+      
+      if (!response.ok) {
+        throw new Error('Pokémon não encontrado');
+      }
+
+      const locations = await response.json();
+
+      mapContent.innerHTML = `
+        <div class="map-background">
+          <img src="imagens/mapa-mundi.png" alt="Mapa mundial Pokémon" class="world-map" />
+        </div>
+        <div class="map-overlay">
+        </div>
+      `;
+
+      if (locations.length === 0) {
+        mapContent.innerHTML += `
+          <div class="map-overlay">
+            <div class="location-error">
+              <div class="error-icon">⚠</div>
+              <p>Este Pokémon não foi encontrado em localizações conhecidas.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      for (const location of locations) {
+        const card = document.createElement('div');
+        card.className = 'location-card';
+        
+        const locName = formatLocationName(location.location_area.name);
+        const versions = [...new Set(location.version_details.map(v => capitalize(v.version.name)))].join(', ');
+
+        card.innerHTML = `
+          <div class="location-header">
+            <span class="location-name">${locName}</span>
+            <span class="location-marker">🧭</span>
+          </div>
+          <div class="location-games">${versions}</div>
+          <div class="other-pokemon">
+            <span>Carregando outros Pokémon...</span>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          fetchOtherPokemonFromLocation(location.location_area.url, card.querySelector('.other-pokemon'));
+        });
+
+        locationsList.appendChild(card);
+      }
+
+    } catch (err) {
+      console.error('Erro ao buscar localizações:', err);
+      mapContent.innerHTML = `
+        <div class="map-background">
+          <img src="imagens/mapa-mundi.png" alt="Mapa mundial Pokémon" class="world-map" />
+        </div>
+        <div class="map-overlay">
+          <div class="location-error">
+            <div class="error-icon">⚠</div>
+            <p>${err.message}</p>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  async function fetchOtherPokemonFromLocation(url, container) {
+    container.innerHTML = '<span>Carregando...</span>';
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const pokemonNames = data.pokemon_encounters.map(p => p.pokemon.name);
+
+      if (pokemonNames.length === 0) {
+        container.innerHTML = '<span>Nenhum outro Pokémon nesta área.</span>';
+        return;
+      }
+
+      container.innerHTML = '<strong>Outros Pokémon:</strong><div class="other-pokemon-list">' +
+        pokemonNames.map(name => `<span class="pokemon-link" data-name="${name}">${capitalize(name)}</span>`).join('') +
+        '</div>';
+    } catch (err) {
+      container.innerHTML = '<span>Erro ao carregar.</span>';
+    }
+  }
+
+  locationsList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('pokemon-link')) {
+      const name = e.target.dataset.name;
+      const basePath = window.location.pathname.split('/').slice(0, -1).join('/');
+      window.location.href = `${basePath}/index.html?pokemon=${name}`;
+    }
+  });
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-mode');
+      const icon = themeToggle.querySelector('.theme-icon');
+      icon.textContent = isLight ? '☀' : '◐';
+      
+      if (isLight) {
+        document.body.style.backgroundImage = "url('./imagens/background1.png')";
+      } else {
+        document.body.style.backgroundImage = "url('./imagens/background2.png')";
+      }
+    });
+  }
+
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      pokedexNav.classList.toggle('open');
+    });
+  }
+
+  async function init() {
+    await fetchAllPokemonNames();
+
+    const params = new URLSearchParams(window.location.search);
+    const pokemonParam = params.get('pokemon');
+    
+    if (pokemonParam) {
+      searchInput.value = capitalize(pokemonParam);
+      fetchAndRenderLocation(pokemonParam);
+    }
+  }
+
+  init();
 });

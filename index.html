@@ -3,137 +3,220 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Pokédex Retrowave - Uma Pokédex retrô estilizada com tema cyberpunk dos anos 80. Explore Pokémon, evoluções e localizações." />
+  <meta name="keywords" content="pokedex, pokemon, retro, retrowave, cyberpunk, evoluções, localizações" />
+  <meta name="author" content="Lucas Motoso" />
+  <meta name="theme-color" content="#8b0016" />
+  
+  <meta property="og:title" content="Pokédex Retrowave" />
+  <meta property="og:description" content="Uma Pokédex estilizada com tema retrô-futurista" />
+  <meta property="og:image" content="imagens/preview.png" />
+  <meta property="og:type" content="website" />
+  
   <title>Pokédex Retrowave</title>
   <link rel="icon" type="image/png" href="imagens/logo-pokedex.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <!-- HEADER PADRONIZADO -->
-<header class="pokedex-header">
-  <div class="logo-container">
-    <img src="imagens/logo-pokedex.png" alt="Logo Pokédex" class="pokedex-logo" />
+  <div class="background-effects">
+    <div class="scanline"></div>
+    <div class="grid-overlay"></div>
   </div>
 
-  <button id="menu-toggle" class="menu-toggle">☰</button>
-
-    <span></span><span></span><span></span>
-  </button>
-
-  <nav class="pokedex-nav" id="pokedex-nav">
-    <a href="index.html">Início</a>
-    <a href="evolucoes.html">Evoluções</a>
-    <a href="localizacoes.html">Localizações</a>
-  </nav>
-
-  <div class="search-container">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Buscar Pokémon..." />
-    <ul id="suggestions" class="suggestions-list"></ul>
-  </div>
-</header>
-
-  <!-- POKEDEX -->
-  <div class="pokedex">
-    <div class="pokedex-left">
-      <div class="dot-buttons">
-        <div class="dot red"></div>
-        <div class="dot blue"></div>
-        <div class="dot green"></div>
+  <header class="pokedex-header" role="banner">
+    <div class="header-content">
+      <div class="logo-section">
+        <img src="imagens/logo-pokedex.png" alt="Logo Pokédex" class="pokedex-logo" loading="lazy" />
+        <span class="logo-text">Pokedex Wave</span>
       </div>
 
-      <div class="pokedex-sticker">PXD-1809</div>
-      <div class="pokedex-status-bar"><div class="status-fill"></div></div>
-      <div class="screw-top-right"></div>
-      <div class="screw-bottom-left"></div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
 
-      <div class="pokedex-top">
+      <nav class="pokedex-nav" id="pokedex-nav" role="navigation" aria-label="Navegação principal">
+        <a href="index.html" class="nav-link active" data-page="home">
+          <span class="nav-icon">◈</span> Início
+        </a>
+        <a href="evolucoes.html" class="nav-link" data-page="evolution">
+          <span class="nav-icon">⬡</span> Evoluções
+        </a>
+        <a href="localizacoes.html" class="nav-link" data-page="location">
+          <span class="nav-icon">◎</span> Localizações
+        </a>
+      </nav>
+
+      <div class="search-section">
+        <div class="search-wrapper">
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-bar" 
+            placeholder="Buscar Pokémon..." 
+            autocomplete="off"
+            aria-label="Buscar Pokémon"
+          />
+          <div class="search-icon">⌕</div>
+          <ul id="suggestions" class="suggestions-list" role="listbox"></ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content" role="main">
+    <div class="pokedex-container">
+      <div class="pokedex">
+        <div class="pokedex-left" id="pokedex-left">
+          <div class="pokedex-decorations">
+            <div class="screw screw-tl"></div>
+            <div class="screw screw-tr"></div>
+            <div class="screw screw-bl"></div>
+            <div class="screw screw-br"></div>
+          </div>
+
+          <div class="pokedex-screen-header">
+            <div class="led-indicators">
+              <div class="led led-red" title="Status"></div>
+              <div class="led led-yellow" title="Dados"></div>
+              <div class="led led-green" title="Pronto"></div>
+            </div>
+            <div class="model-number">PXD-1989</div>
+          </div>
+
+          <div class="status-bar-container">
+            <div class="status-label">SCANNING</div>
+            <div class="status-bar">
+              <div class="status-fill" id="status-fill"></div>
+            </div>
+          </div>
+
+          <div class="screen-bezel">
+            <div class="screen-glare"></div>
+            <div class="pokedex-screen" id="pokemon-display" role="img" aria-label="Imagem do Pokémon">
+              <div class="loading-pokemon">
+                <div class="loading-spinner"></div>
+                <span>CARREGANDO...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls-section">
+            <div class="nav-buttons">
+              <button id="prev-btn" class="nav-btn" aria-label="Pokémon anterior" title="Anterior">
+                <span class="btn-icon">◀</span>
+                <span class="btn-label">PREV</span>
+              </button>
+              
+              <button id="toggle-theme" class="theme-btn" aria-label="Alternar tema" title="Tema">
+                <span class="theme-icon">◐</span>
+              </button>
+              
+              <button id="next-btn" class="nav-btn" aria-label="Próximo Pokémon" title="Próximo">
+                <span class="btn-label">NEXT</span>
+                <span class="btn-icon">▶</span>
+              </button>
+            </div>
+
+            <button id="evolution-btn" class="action-btn">
+              <span class="btn-icon">⟳</span>
+              <span>VER EVOLUÇÃO</span>
+            </button>
+          </div>
+
+          <div class="speaker-grill">
+            <div class="speaker-line"></div>
+            <div class="speaker-line"></div>
+            <div class="speaker-line"></div>
+            <div class="speaker-line"></div>
+            <div class="speaker-line"></div>
+          </div>
+        </div>
+
+        <div class="pokedex-right" id="pokedex-right">
+          <div class="screen-bezel-right">
+            <div class="screen-glare-right"></div>
+            <div class="pokedex-screen-right">
+              <div class="pokemon-header">
+                <h2 id="pokemon-name" class="pokemon-name">---</h2>
+                <span id="pokemon-id" class="pokemon-id">#000</span>
+              </div>
+
+              <div class="pokemon-types" id="pokemon-type">
+                <span class="type-badge">---</span>
+              </div>
+
+              <div class="pokemon-measurements">
+                <div class="measurement">
+                  <span class="measure-label">ALTURA</span>
+                  <span id="pokemon-height" class="measure-value">--.- m</span>
+                </div>
+                <div class="measurement">
+                  <span class="measure-label">PESO</span>
+                  <span id="pokemon-weight" class="measure-value">--.- kg</span>
+                </div>
+              </div>
+
+              <div class="pokemon-abilities">
+                <span class="section-label">HABILIDADES</span>
+                <p id="pokemon-abilities">---</p>
+              </div>
+
+              <div class="pokemon-stats">
+                <span class="section-label">STATUS BASE</span>
+                <div id="pokemon-base-stats" class="base-stats"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="seal-section">
+            <img src="imagens/logo-pokedex1.png" alt="Selo Pokédex" class="pokedex-seal" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="pokedex-footer" role="contentinfo">
+    <div class="footer-frame">
+      <div class="footer-glow"></div>
+      <div class="footer-top">
         <div class="led-group">
           <div class="led led-red"></div>
           <div class="led led-yellow"></div>
           <div class="led led-green"></div>
         </div>
+        <h2 class="footer-title">Pokédex Retrowave</h2>
+        <div class="version-tag">v2.0</div>
       </div>
 
-      <div class="pokedex-screen">
-        <div id="pokemon-display" class="pokemon-info">
-          <p>Carregando...</p>
-        </div>
+      <div class="footer-links">
+        <a href="https://github.com/lucasmotoso" target="_blank" rel="noopener noreferrer" class="social-link">
+          <span class="link-icon">⌘</span> GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/lucas-motoso/" target="_blank" rel="noopener noreferrer" class="social-link">
+          <span class="link-icon">◈</span> LinkedIn
+        </a>
+        <a href="mailto:lucasmotoso@gmail.com" class="social-link">
+          <span class="link-icon">✉</span> Email
+        </a>
+        <a href="https://www.instagram.com/lucas_motoso/" target="_blank" rel="noopener noreferrer" class="social-link">
+          <span class="link-icon">◉</span> Instagram
+        </a>
       </div>
 
-      <div class="pokedex-controls">
-        <button id="prev-btn">◀</button>
-        <button id="toggle-theme" class="theme-btn">🌙</button>
-        <button id="next-btn">▶</button>
-        <button id="evolution-btn" class="btn">Ver Evolução</button>
-      </div>
-
-      <div class="pokedex-bottom-decoration">
-        <div class="speaker"></div>
-      </div>
-    </div>
-
-    <div class="pokedex-right">
-      <div class="pokedex-screen-right">
-        <div class="pokedex-details">
-          <h2 id="pokemon-name">Nome</h2>
-          <p id="pokemon-type">Tipo</p>
-          <p id="pokemon-id">#001</p>
-        </div>
-
-        <div class="pokedex-stats">
-          <p id="pokemon-height">Altura: </p>
-          <p id="pokemon-weight">Peso: </p>
-          <p id="pokemon-abilities">Habilidades: </p>
-          <div id="pokemon-base-stats" class="base-stats"></div>
-        </div>
-
-        <div class="stat">
-          <label>HP:</label>
-          <div class="bar">
-            <div class="fill" style="width: 60%"></div>
-          </div>
-        </div>
-
-        <div class="seal-container">
-          <img src="imagens/logo-pokedex1.png" alt="Selo Pokédex" class="pokedex-seal" />
-        </div>
+      <div class="footer-info">
+        <p>© 2025 Lucas Motoso. Todos os direitos reservados.</p>
+        <p class="disclaimer">Este projeto não é afiliado à The Pokémon Company.</p>
       </div>
     </div>
-  </div>
+  </footer>
 
   <script src="script.js"></script>
-  <script>
-    // Menu hamburguer
-    document.getElementById("menu-toggle").addEventListener("click", () => {
-      document.getElementById("pokedex-nav").classList.toggle("nav-open");
-    });
-  </script>
-  <!-- Bloco HTML do Rodapé -->
-<footer class="pokedex-footer">
-  <div class="footer-frame">
-    <div class="footer-top">
-      <div class="led-group">
-        <div class="led red"></div>
-        <div class="led yellow"></div>
-        <div class="led green"></div>
-      </div>
-      <h2 class="footer-title">Pokédex Retrowave</h2>
-    </div>
-
-    <div class="footer-links">
-      <a href="https://github.com/lucasmotoso" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com/in/lucas-motoso/" target="_blank">LinkedIn</a>
-      <a href="mailto:lucasmotoso@gmail.com">Email</a>
-      <a href="https://www.instagram.com/lucas_motoso/" target="_blank">Instagram</a>
-    </div>
-
-    <div class="footer-info">
-      <p>© 2025 Lucas Motoso. Todos os direitos reservados.</p>
-      <p>Este projeto não é afiliado à The Pokémon Company.</p>
-    </div>
-  </div>
-</footer>
 </body>
 </html>
