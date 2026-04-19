@@ -412,12 +412,24 @@
   }
 }
 
-/* Light Mode */
+/* Location Page - Dark mode (default) */
+body.location-page {
+  background: #0a0a0f;
+  background-color: #0a0a0f;
+  background-image: url('./imagens/background2.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Location Page - Light mode */
 body.light-mode.location-page {
-  background: #f0f0f0;
-  background-image: 
-    radial-gradient(ellipse at 30% 20%, rgba(255, 200, 0, 0.08) 0%, transparent 50%),
-    linear-gradient(180deg, #e8e8e8 0%, #f5f5f5 100%);
+  background: #f8f8f8;
+  background-color: #f8f8f8;
+  background-image: url('./imagens/background1.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 body.light-mode .map-frame {
