@@ -243,11 +243,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const icon = themeToggle.querySelector('.theme-icon');
       icon.textContent = isLight ? '☀' : '◐';
       
-      if (isLight) {
-        document.body.style.backgroundImage = "url('./imagens/background1.png')";
-      } else {
-        document.body.style.backgroundImage = "url('./imagens/background2.png')";
-      }
+      // Remove any type-based background classes
+      document.body.classList.remove('bg-type-normal', 'bg-type-fire', 'bg-type-water', 'bg-type-electric', 'bg-type-grass', 'bg-type-ice', 'bg-type-fighting', 'bg-type-poison', 'bg-type-ground', 'bg-type-flying', 'bg-type-psychic', 'bg-type-bug', 'bg-type-rock', 'bg-type-ghost', 'bg-type-dragon', 'bg-type-dark', 'bg-type-steel', 'bg-type-fairy');
+      
+      // Note: We do not add type background on the locations page for simplicity.
     });
   }
 

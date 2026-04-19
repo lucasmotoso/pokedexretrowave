@@ -207,14 +207,11 @@ toggleThemeBtn.addEventListener('click', () => {
   const icon = toggleThemeBtn.querySelector('.theme-icon');
   icon.textContent = isLight ? '☀' : '◐';
   
-  if (isLight) {
-    document.body.style.backgroundImage = "url('./imagens/background1.png')";
-  } else {
-    document.body.style.backgroundImage = "url('./imagens/background2.png')";
-  }
+  // Remove any type-based background classes
+  document.body.classList.remove('bg-type-normal', 'bg-type-fire', 'bg-type-water', 'bg-type-electric', 'bg-type-grass', 'bg-type-ice', 'bg-type-fighting', 'bg-type-poison', 'bg-type-ground', 'bg-type-flying', 'bg-type-psychic', 'bg-type-bug', 'bg-type-rock', 'bg-type-ghost', 'bg-type-dragon', 'bg-type-dark', 'bg-type-steel', 'bg-type-fairy');
   
+  // Apply type background only in dark mode
   if (currentPokemonData && !isLight) {
-    document.body.classList.remove('bg-type-normal', 'bg-type-fire', 'bg-type-water', 'bg-type-electric', 'bg-type-grass', 'bg-type-ice', 'bg-type-fighting', 'bg-type-poison', 'bg-type-ground', 'bg-type-flying', 'bg-type-psychic', 'bg-type-bug', 'bg-type-rock', 'bg-type-ghost', 'bg-type-dragon', 'bg-type-dark', 'bg-type-steel', 'bg-type-fairy');
     document.body.classList.add(`bg-type-${currentPokemonData.types[0].type.name}`);
   }
 });
